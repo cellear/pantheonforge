@@ -2,7 +2,7 @@ name: Docker build and push template
 on:
   push:
     branches:
-      - drupalforge
+      - main
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

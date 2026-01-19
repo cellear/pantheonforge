@@ -11,6 +11,7 @@ permissions:
   actions: write
 jobs:
   build-php-8_2:
+    if: github.ref_name == 'main'
     uses: ./.github/workflows/docker-publish-image.yml
     with:
       webserver_image: devpanel/php:8.2-base-ai

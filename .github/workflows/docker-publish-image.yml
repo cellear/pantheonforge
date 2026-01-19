@@ -84,14 +84,19 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Set env to PHP 8.2 environment
-      if: endsWith(inputs.webserver_image, ':8.2-base-ai')
+      if: github.ref_name == 'main' && endsWith(inputs.webserver_image, ':8.2-base-ai')
       run: |
         echo "IMAGE_TAG=drupalforge/drupalpod:php-8.2" >> $GITHUB_ENV
 
     - name: Set env to PHP 8.3 environment
-      if: endsWith(inputs.webserver_image, ':8.3-base-ai')
+      if: github.ref_name == 'main' && endsWith(inputs.webserver_image, ':8.3-base-ai')
       run: |
         echo "IMAGE_TAG=drupalforge/drupalpod:php-8.3" >> $GITHUB_ENV
+
+    - name: Set image tag to branch name
+      if: github.ref_name != 'main'
+      run: |
+        echo "IMAGE_TAG=drupalforge/drupalpod:${{ github.ref_name }}" >> $GITHUB_ENV
 
     - name: Commit and push the container state to Docker Hub
       run: |
@@ -99,7 +104,7 @@ jobs:
         docker push ${{ env.IMAGE_TAG }}
 
     - name: Push to tag latest
-      if: endsWith(inputs.webserver_image, ':8.3-base-ai')
+      if: github.ref_name == 'main' && endsWith(inputs.webserver_image, ':8.3-base-ai')
       run: |
         docker commit ${{ job.services.webserver.id }} drupalforge/drupalpod:latest
         docker push drupalforge/drupalpod:latest

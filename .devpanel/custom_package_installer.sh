@@ -42,3 +42,15 @@ fi
 if $PECL_UPDATED && sudo /etc/init.d/apache2 status > /dev/null; then
   sudo /etc/init.d/apache2 reload
 fi
+
+# added by Luke from instructions by Claude Feb 5, 2026
+
+# Install Pantheon Terminus CLI tool.
+if ! command -v terminus >/dev/null 2>&1; then
+  curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/master/builds/phar-latest.phar
+  chmod +x phar-latest.phar
+  sudo mv phar-latest.phar /usr/local/bin/terminus
+  echo "Terminus installed successfully at /usr/local/bin/terminus"
+else
+  echo "Terminus is already installed."
+fi
